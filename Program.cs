@@ -20,9 +20,20 @@ Lykke til!
 
 /*
 parseString -> inputString:
+    string[] output
+    string currentworking
+    bool operatorFound = false
     loop over string:
-        if 'operator':
-            sub-string fra 1- index, til 1+ indx.
+        if operator-char:
+            if(operatorFound = true)
+                output.push <- currentWorking
+                operatorFound = false
+                continue 
+            else
+                operatorFound = true
+                continue
+        else is-not-whitespace:
+            currentWorking += current-char
 
 
 "Display menu:"
@@ -52,3 +63,11 @@ psudo main:
 
         print sum.
 */
+
+Kalkulator.parseInput("1 + 2 + 5");
+/*
+foreach (string[] val in tmp){
+    for (int i = 0 ; i < val.Length ; i++){
+        Console.WriteLine($"val: {val[i]}");
+    }
+}*/
