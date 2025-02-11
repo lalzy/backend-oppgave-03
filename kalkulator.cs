@@ -55,6 +55,7 @@ static public class Kalkulator{
 
 
     static public dynamic div(dynamic a, dynamic b){
+        // Tvinger double return, da dynamic foretrekker å returnere int, selv om verdien helt tydelig ikke er.
         return (double)a / (double)b;
     }
 
