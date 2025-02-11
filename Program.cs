@@ -10,7 +10,6 @@ Tips:
  - Tenk på å sette opp smarte overloads for hver operasjon.
  - Kanskje vi kan be bruker om en rekke tall de vil gjøre operasjonen mot, sepparert med et kjent tegn vi kan bruke senere for å splitte input?
 
-
 Dere står fritt til å lage et annet program, så lenge det tar i bruk modeller, og overloading av metoder, samt programflyt.
 
 Husk å planlegge med pseudokode og skisser.
@@ -36,6 +35,11 @@ parseString -> inputString:
             currentWorking += current-char
 
 
+
+kalkulasjon:
+    loop igjennon og sjekk om det er * eller /.
+        Legg i en temp liste.
+
 "Display menu:"
     Velkommen til kalulatoren. Skriv quit for å avslutte.
     du bruker ved å skrive in num, operasjon, num, så enter.
@@ -51,6 +55,8 @@ psudo main:
             exit
         
         parsedString[[operation, val, val], ditto] = parse input:
+
+        kalkulasjon()
     
 
 
@@ -64,10 +70,32 @@ psudo main:
         print sum.
 */
 
-Kalkulator.parseInput("1 + 2 + 5");
+
+// List<string> val = Kalkulator.parseInput("1 + 2 + 5 \\ 3.4");
+// for (int i = 0 ; i < val.Count ; i++){
+//     if((i % 2) == 0){
+//         Console.WriteLine($"numer: {Kalkulator.getNum(val[i])}");
+//     }else{
+//         Console.WriteLine($"Operator: {val[i]}");
+//     }
+// }
+
+Kalkulator.Kalkuler("1 + 2 * 3 + 4 + 5");
+
+
+
 /*
-foreach (string[] val in tmp){
-    for (int i = 0 ; i < val.Length ; i++){
-        Console.WriteLine($"val: {val[i]}");
-    }
-}*/
+
+1 + 2 * 3 + 4 + 5
+
+1 + 6 + 4 + 5
+
+expected:
+    mult: 2 * 3
+    add: 1 + 3 + 4 + 5
+
+loop:
+    if *:
+        add 2, *, 3
+
+*/
