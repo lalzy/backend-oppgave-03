@@ -71,24 +71,14 @@ psudo main:
 */
 
 
-// List<string> val = Kalkulator.parseInput("1 + 2 + 5 \\ 3.4");
-// for (int i = 0 ; i < val.Count ; i++){
-//     if((i % 2) == 0){
-//         Console.WriteLine($"numer: {Kalkulator.getNum(val[i])}");
-//     }else{
-//         Console.WriteLine($"Operator: {val[i]}");
-//     }
-// }
-
-Kalkulator.Kalkuler("1 + 2 * 3 + 4 + 5");
-
-
-
-/*
+/* re-tenking
 
 1 + 2 * 3 + 4 + 5
 
 1 + 6 + 4 + 5
+
+
+first-pass <- check previous. Other passes only check next.
 
 expected:
     mult: 2 * 3
@@ -99,3 +89,15 @@ loop:
         add 2, *, 3
 
 */
+
+// List<string> val = Kalkulator.parseInput("1 + 2 + 5 \\ 3.4");
+// for (int i = 0 ; i < val.Count ; i++){
+//     if((i % 2) == 0){
+//         Console.WriteLine($"numer: {Kalkulator.getNum(val[i])}");
+//     }else{
+//         Console.WriteLine($"Operator: {val[i]}");
+//     }
+// }
+
+Kalkulator.Kalkuler("1 + 2 * 3 + 4 - 5");
+

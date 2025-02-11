@@ -40,17 +40,6 @@ static public class Kalkulator{
     }
 
 
-    static public int add(int a, int b){
-        return a + b;
-    }
-    static public double add(double a, double b){
-        return a + b;
-    }
-
-    static public dynamic add(dynamic a, dynamic b){
-        return a + b;
-    }
-
     static public dynamic mult(dynamic a, dynamic b){
         return a * b;
     }
@@ -74,18 +63,23 @@ static public class Kalkulator{
     }
 
 
+    static private dynamic add(List<string> numSeq, int i, int sum){
+        return sum;
+    }
 
     static private dynamic addSubCheck(List<string> numSeq){
         dynamic sum = 0;
-
-        for(int i = 0; i < numSeq.Count ; i++){
-            if(i % 2 == 0){
-                if(i + 1 < numSeq.Count){
-                    if(numSeq[i+1] == "+"){
-                        sum += getNum(numSeq[i]);
-                    }
-                }else if(i == numSeq.Count - 1){
-                     sum += getNum(numSeq[i]);
+        bool firstPass = true;
+        for (int i = 0; i < numSeq.Count ; i++){
+            if (i % 2 != 0){
+                if(firstPass){
+                    firstPass = false;
+                    sum = getNum(numSeq[i - 1]);
+                }
+                if(numSeq[i] == "+"){
+                    sum += getNum(numSeq[++i]);
+                }else if(numSeq[i] == "-"){
+                    sum -= getNum(numSeq[++i]);
                 }
             }
         }
@@ -113,7 +107,6 @@ static public class Kalkulator{
         numSeq = mulDivCheck(numSeq);
         dynamic sum = addSubCheck(numSeq);
         Console.WriteLine($"sum = {sum}");
-        // Console.WriteLine($"sum = {sum}");
     }
 
     /// <summary>
