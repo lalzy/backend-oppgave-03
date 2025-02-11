@@ -18,6 +18,8 @@ parseString -> inputString:
 
 
 using System.Globalization;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 static public class Kalkulator{
     /// <summary>
@@ -45,6 +47,14 @@ static public class Kalkulator{
         return a + b;
     }
 
+    static public dynamic add(dynamic a, dynamic b){
+        return a + b;
+    }
+
+    static public dynamic mult(dynamic a, dynamic b){
+        return a * b;
+    }
+
     static public int mult(int a, int b){
         return a * b;
     }
@@ -53,27 +63,56 @@ static public class Kalkulator{
         return a * b;
     }
 
-    static private List<string> multCheck(List<string> numSeq){
+
+    static private List<string> calcTest(Func<dynamic, dynamic, dynamic> test, List<string> numSeq, int i){
+        dynamic a = getNum(numSeq[i - 1]);
+        dynamic b = getNum(numSeq[i + 1]);
+        numSeq.RemoveAt(i + 1);
+        numSeq.RemoveAt(i);
+        numSeq[i - 1] = test(a, b).ToString();
+        return numSeq;
+    }
+
+
+
+    static private dynamic addSubCheck(List<string> numSeq){
+        dynamic sum = 0;
+
         for(int i = 0; i < numSeq.Count ; i++){
-            if(i % 2 != 0){ // even = numbers
-                if (numSeq[i] == "*"){
-                    dynamic a = getNum(numSeq[i - 1]);
-                    dynamic b = getNum(numSeq[i + 1]);
-                    numSeq.RemoveAt(i + 1);
-                    numSeq.RemoveAt(i);
-                    numSeq[i - 1] = mult(a, b).ToString();
+            if(i % 2 == 0){
+                if(i + 1 < numSeq.Count){
+                    if(numSeq[i+1] == "+"){
+                        sum += getNum(numSeq[i]);
+                    }
+                }else if(i == numSeq.Count - 1){
+                     sum += getNum(numSeq[i]);
                 }
             }
         }
-        //output.AddRange(numSeq);
+        return sum;
+    }
+
+    static private List<string> mulDivCheck(List<string> numSeq){
+        for(int i = 0; i < numSeq.Count ; i++){
+            if(i % 2 != 0){ // even = numbers
+                if (numSeq[i] == "*"){
+                    numSeq = calcTest(mult, numSeq, i);
+                }
+                // else if(numSeq[i] == "/" || numSeq[i] == "\\"){
+                //     // en funksjon som gjør det?
+                //     numSeq = calcTest(div, numSeq, i);
+                // }
+            }
+        }
+
         return numSeq;
     }
 
     static public void Kalkuler(string input){
         List<string> numSeq = parseInput(input);
-        foreach(string t in multCheck(numSeq)){
-            Console.WriteLine(t);
-        }
+        numSeq = mulDivCheck(numSeq);
+        dynamic sum = addSubCheck(numSeq);
+        Console.WriteLine($"sum = {sum}");
         // Console.WriteLine($"sum = {sum}");
     }
 
