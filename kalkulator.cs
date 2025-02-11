@@ -53,6 +53,19 @@ static public class Kalkulator{
     }
 
 
+
+    static public dynamic div(dynamic a, dynamic b){
+        return (double)a / (double)b;
+    }
+
+    static public int div(int a, int b){
+        return a / b;
+    }
+
+    static public double div(double a, double b){
+        return a / b;
+    }
+
     static private List<string> calcTest(Func<dynamic, dynamic, dynamic> test, List<string> numSeq, int i){
         dynamic a = getNum(numSeq[i - 1]);
         dynamic b = getNum(numSeq[i + 1]);
@@ -60,11 +73,6 @@ static public class Kalkulator{
         numSeq.RemoveAt(i);
         numSeq[i - 1] = test(a, b).ToString();
         return numSeq;
-    }
-
-
-    static private dynamic add(List<string> numSeq, int i, int sum){
-        return sum;
     }
 
     static private dynamic addSubCheck(List<string> numSeq){
@@ -76,6 +84,7 @@ static public class Kalkulator{
                     firstPass = false;
                     sum = getNum(numSeq[i - 1]);
                 }
+
                 if(numSeq[i] == "+"){
                     sum += getNum(numSeq[++i]);
                 }else if(numSeq[i] == "-"){
@@ -92,10 +101,10 @@ static public class Kalkulator{
                 if (numSeq[i] == "*"){
                     numSeq = calcTest(mult, numSeq, i);
                 }
-                // else if(numSeq[i] == "/" || numSeq[i] == "\\"){
-                //     // en funksjon som gjør det?
-                //     numSeq = calcTest(div, numSeq, i);
-                // }
+                else 
+                if(numSeq[i] == "/" || numSeq[i] == "\\"){
+                    numSeq = calcTest(div, numSeq, i);
+                }
             }
         }
 
@@ -105,6 +114,9 @@ static public class Kalkulator{
     static public void Kalkuler(string input){
         List<string> numSeq = parseInput(input);
         numSeq = mulDivCheck(numSeq);
+        foreach(string num in numSeq){
+            Console.WriteLine($"{num}");
+        }
         dynamic sum = addSubCheck(numSeq);
         Console.WriteLine($"sum = {sum}");
     }
