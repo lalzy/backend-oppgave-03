@@ -16,11 +16,6 @@ parseString -> inputString:
             currentWorking += current-char
 */
 
-
-using System.Globalization;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-
 static public class Kalkulator{
     /// <summary>
     /// Check if passed character is an math-operator or not
@@ -79,19 +74,24 @@ static public class Kalkulator{
     static private dynamic addSubCheck(List<string> numSeq){
         dynamic sum = 0;
         bool firstPass = true;
-        for (int i = 0; i < numSeq.Count ; i++){
-            if (i % 2 != 0){
-                if(firstPass){
-                    firstPass = false;
-                    sum = getNum(numSeq[i - 1]);
-                }
+        if(numSeq.Count > 1){
+            for (int i = 0; i < numSeq.Count ; i++){
+                if (i % 2 != 0){
+                    if(firstPass){
+                        firstPass = false;
+                        sum = getNum(numSeq[i - 1]);
+                    }
 
-                if(numSeq[i] == "+"){
-                    sum += getNum(numSeq[++i]);
-                }else if(numSeq[i] == "-"){
-                    sum -= getNum(numSeq[++i]);
+                    if(numSeq[i] == "+"){
+                        sum += getNum(numSeq[++i]);
+                    }else if(numSeq[i] == "-"){
+                        sum -= getNum(numSeq[++i]);
+                    }
                 }
             }
+        // Hvis vi ganger/deler kun 1 nummer, så ligger dette i NumSeq[0].
+        }else{
+            sum = getNum(numSeq[0]);
         }
         return sum;
     }
@@ -111,15 +111,21 @@ static public class Kalkulator{
 
         return numSeq;
     }
-
-    static public void Kalkuler(string input){
-        List<string> numSeq = parseInput(input);
-        numSeq = mulDivCheck(numSeq);
-        foreach(string num in numSeq){
-            Console.WriteLine($"{num}");
+    static private void error(){
+            Console.WriteLine("ugylding input. Må være nummer, nevner, nummer");
+    }
+    static public dynamic Kalkuler(string input){
+        dynamic sum = 0;
+        try{
+            List<string> numSeq = parseInput(input);
+            numSeq = mulDivCheck(numSeq);
+            sum = addSubCheck(numSeq);
+        }catch(ArgumentOutOfRangeException){
+            error();
+        }catch(InvalidCastException){
+            error();
         }
-        dynamic sum = addSubCheck(numSeq);
-        Console.WriteLine($"sum = {sum}");
+        return sum;
     }
 
     /// <summary>
@@ -156,7 +162,7 @@ static public class Kalkulator{
         }else if (float.TryParse(numberString, out float floatValue)){
             return floatValue;
         }else{
-            throw new Exception($"input: {numberString} is invalid, only accepts a number of either int (2, 3, 4, etc), or float (2.3, 4.3, etc)");
+            throw new InvalidCastException($"input: {numberString} is invalid, only accepts a number of either int (2, 3, 4, etc), or float (2.3, 4.3, etc)");
         }
     }
 }
