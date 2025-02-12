@@ -21,7 +21,6 @@ static public class Kalkulator{
     /// Sjekker om det er en nevner eller ikke.
     /// </summary>
     /// <param name="test"></param>
-    /// <returns></returns>
     static private bool ErNevner(char test){
         switch (test){
             case '+':
@@ -146,7 +145,7 @@ static public class Kalkulator{
     static public dynamic Kalkuler(string input){
         dynamic sum = 0;
         try{
-            List<string> numSeq = parseInput(input);
+            List<string> numSeq = ParseInput(input);
             numSeq = MulDivCheck(numSeq);
             sum = AddSubCheck(numSeq);
         }catch(ArgumentOutOfRangeException){
@@ -162,7 +161,7 @@ static public class Kalkulator{
     /// </summary>
     /// <param name="input">input string'en</param>
     /// <returns>liste med nummer og nevnere.</returns>
-    static private List<string> parseInput(string input){
+    static private List<string> ParseInput(string input){
         List<string> output = new List<string>();
         string tmpString = "";
         for (int i = 0 ; i < input.Length ; i++){
