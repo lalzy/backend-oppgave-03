@@ -131,9 +131,9 @@ static public class Kalkulator{
     }
 
     /// <summary>
-    /// Printer ut en enkel og forstå error melding uten å bryte program flyten.
+    /// Printer ut en enkel og forstå Error melding uten å bryte program flyten.
     /// </summary>
-    static private void error(){
+    static private void Error(){
             Console.WriteLine("ugylding input. Må være nummer, nevner, nummer");
     }
 
@@ -149,9 +149,9 @@ static public class Kalkulator{
             numSeq = MulDivCheck(numSeq);
             sum = AddSubCheck(numSeq);
         }catch(ArgumentOutOfRangeException){
-            error();
+            Error();
         }catch(InvalidCastException){
-            error();
+            Error();
         }
         return sum;
     }
