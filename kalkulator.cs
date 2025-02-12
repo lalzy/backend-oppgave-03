@@ -18,11 +18,11 @@ parseString -> inputString:
 
 static public class Kalkulator{
     /// <summary>
-    /// Check if passed character is an math-operator or not
+    /// Sjekker om det er en nevner eller ikke.
     /// </summary>
     /// <param name="test"></param>
     /// <returns></returns>
-    static private bool isOperator(char test){
+    static private bool ErNevner(char test){
         switch (test){
             case '+':
             case '-':
@@ -34,44 +34,58 @@ static public class Kalkulator{
         return false;
     }
 
-
-    static public dynamic mult(dynamic a, dynamic b){
+    /// <summary>
+    /// Ganger A med B
+    /// </summary>
+    /// <returns>Ganget verdien av A * B</returns>
+    static private dynamic Mult(dynamic a, dynamic b){
         return a * b;
     }
 
-    static public int mult(int a, int b){
+    // Vise at jeg vet hva, og forstår hva overloads er, og hvorfor de finnes. Men disse her brukes ikke,
+    // p.g.a jeg sender mult som en "reference", og det er derfor ikke mulig (for C#) 
+    // å vite hvilken av de som skal brukes (så må ha en dynamic en).
+    static private int Mult(int a, int b){
         return a * b;
     }
 
-    static public double mult(double a, double b){
+    static private double Mult(double a, double b){
         return a * b;
     }
 
 
-
-    static public dynamic div(dynamic a, dynamic b){
+    /// <summary>
+    /// Deler a med b
+    /// </summary>
+    /// <returns>delte sum av A / D</returns>
+    static private dynamic Div(dynamic a, dynamic b){
         // Tvinger double return, da dynamic foretrekker å returnere int, selv om verdien helt tydelig ikke er.
         return (double)a / (double)b;
     }
 
-    static public int div(int a, int b){
-        return a / b;
-    }
-
-    static public double div(double a, double b){
-        return a / b;
-    }
-
-    static private List<string> calcTest(Func<dynamic, dynamic, dynamic> test, List<string> numSeq, int i){
-        dynamic a = getNum(numSeq[i - 1]);
-        dynamic b = getNum(numSeq[i + 1]);
+    /// <summary>
+    /// Går over, og enten ganger, eller deler (varierende av calcFunc).
+    /// Så fjerner vi nummerene og nevneren, og gir posisjonen heller summen av det vi kalkulerte.
+    /// </summary>
+    /// <param name="calcFunc">Funksjon for å enten dele, eller gange</param>
+    /// <param name="numSeq">Liste av nummer og nevnere (som strings)</param>
+    /// <param name="i">index hvor nevner er</param>
+    /// <returns></returns>
+    static private List<string> KalkulererSettet(Func<dynamic, dynamic, dynamic> calcFunc, List<string> numSeq, int i){
+        dynamic a = GetNum(numSeq[i - 1]);
+        dynamic b = GetNum(numSeq[i + 1]);
         numSeq.RemoveAt(i + 1);
         numSeq.RemoveAt(i);
-        numSeq[i - 1] = test(a, b).ToString();
+        numSeq[i - 1] = calcFunc(a, b).ToString();
         return numSeq;
     }
 
-    static private dynamic addSubCheck(List<string> numSeq){
+    /// <summary>
+    /// Går igjennom listen og legger til, eller trekker fra verdiene in i en 'sum'.
+    /// </summary>
+    /// <param name="numSeq">Parsed set av nummer og nevnere</param>
+    /// <returns>Summen som er kalkulert i enten double, eller int.</returns>
+    static private dynamic AddSubCheck(List<string> numSeq){
         dynamic sum = 0;
         bool firstPass = true;
         if(numSeq.Count > 1){
@@ -79,47 +93,62 @@ static public class Kalkulator{
                 if (i % 2 != 0){
                     if(firstPass){
                         firstPass = false;
-                        sum = getNum(numSeq[i - 1]);
+                        sum = GetNum(numSeq[i - 1]);
                     }
 
                     if(numSeq[i] == "+"){
-                        sum += getNum(numSeq[++i]);
+                        sum += GetNum(numSeq[++i]);
                     }else if(numSeq[i] == "-"){
-                        sum -= getNum(numSeq[++i]);
+                        sum -= GetNum(numSeq[++i]);
                     }
                 }
             }
         // Hvis vi ganger/deler kun 1 nummer, så ligger dette i NumSeq[0].
         }else{
-            sum = getNum(numSeq[0]);
+            sum = GetNum(numSeq[0]);
         }
         return sum;
     }
 
-    static private List<string> mulDivCheck(List<string> numSeq){
+    /// <summary>
+    /// Går igjennom listen, og summer opp med ganging, eller deling i riktig rekkefølge.
+    /// </summary>
+    /// <param name="numSeq">parsed-list av nummer og nevnere.</param>
+    /// <returns>Liste med ferdi kalkulert gange/dele verdi'er (som string) uten brukte nevnere (*, /)</returns>
+    static private List<string> MulDivCheck(List<string> numSeq){
         for(int i = 0; i < numSeq.Count ; i++){
             if(i % 2 != 0){ // even = numbers
                 if (numSeq[i] == "*"){
-                    numSeq = calcTest(mult, numSeq, i);
+                    numSeq = KalkulererSettet(Mult, numSeq, i);
                 }
                 else 
                 if(numSeq[i] == "/" || numSeq[i] == "\\"){
-                    numSeq = calcTest(div, numSeq, i);
+                    numSeq = KalkulererSettet(Div, numSeq, i);
                 }
             }
         }
 
         return numSeq;
     }
+
+    /// <summary>
+    /// Printer ut en enkel og forstå error melding uten å bryte program flyten.
+    /// </summary>
     static private void error(){
             Console.WriteLine("ugylding input. Må være nummer, nevner, nummer");
     }
+
+    /// <summary>
+    /// Hoved funksjonen for kalkulatoren, sender input videre.
+    /// </summary>
+    /// <param name="input">bruker input som string</param>
+    /// <returns>Summen som er kalkulert</returns>
     static public dynamic Kalkuler(string input){
         dynamic sum = 0;
         try{
             List<string> numSeq = parseInput(input);
-            numSeq = mulDivCheck(numSeq);
-            sum = addSubCheck(numSeq);
+            numSeq = MulDivCheck(numSeq);
+            sum = AddSubCheck(numSeq);
         }catch(ArgumentOutOfRangeException){
             error();
         }catch(InvalidCastException){
@@ -129,15 +158,15 @@ static public class Kalkulator{
     }
 
     /// <summary>
-    /// Parses a string-input into an list of strings separating the numbers, with the operators.
+    /// Parser en string til en liste av nummer og nevnere.
     /// </summary>
-    /// <param name="input">The user inputed string</param>
-    /// <returns>list separating numbers and operators in sequence.</returns>
-    static public List<string> parseInput(string input){
+    /// <param name="input">input string'en</param>
+    /// <returns>liste med nummer og nevnere.</returns>
+    static private List<string> parseInput(string input){
         List<string> output = new List<string>();
         string tmpString = "";
         for (int i = 0 ; i < input.Length ; i++){
-            if (isOperator(input[i])){
+            if (ErNevner(input[i])){
                 output.Add(tmpString);
                 output.Add(input[i].ToString());
                 tmpString = "";
@@ -152,17 +181,17 @@ static public class Kalkulator{
     }
 
     /// <summary>
-    /// Convert the passed number (as string) into either an int, or a float.
+    /// converterer nummere (Som en string) til enten en int eller en double.
     /// </summary>
-    /// <param name="numberString">The number we want to convert</param>
-    /// <returns>Either int, or float of the passed number</returns>
-    static public dynamic getNum (string numberString){
+    /// <param name="numberString">Nummeret vi ønsker å convertere (som string)</param>
+    /// <returns>enten double eller int.</returns>
+    static private dynamic GetNum (string numberString){
         if(int.TryParse(numberString, out int intValue)){
             return intValue;
-        }else if (float.TryParse(numberString, out float floatValue)){
-            return floatValue;
+        }else if (double.TryParse(numberString, out double doubleValue)){
+            return doubleValue;
         }else{
-            throw new InvalidCastException($"input: {numberString} is invalid, only accepts a number of either int (2, 3, 4, etc), or float (2.3, 4.3, etc)");
+            throw new InvalidCastException($"input: {numberString} is invalid, only accepts a number of either int (2, 3, 4, etc), or double (2.3, 4.3, etc)");
         }
     }
 }
