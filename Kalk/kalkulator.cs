@@ -16,12 +16,14 @@ parseString -> inputString:
             currentWorking += current-char
 */
 
+
 static public class Kalkulator{
     /// <summary>
     /// Sjekker om det er en nevner eller ikke.
     /// </summary>
     /// <param name="test"></param>
-    static private bool ErNevner(char test){
+
+    static public bool ErNevner(char test){
         switch (test){
             case '+':
             case '-':
@@ -37,18 +39,18 @@ static public class Kalkulator{
     /// Ganger A med B
     /// </summary>
     /// <returns>Ganget verdien av A * B</returns>
-    static private dynamic Mult(dynamic a, dynamic b){
+    public static dynamic Mult(dynamic a, dynamic b){
         return a * b;
     }
 
     // Vise at jeg vet hva, og forstår hva overloads er, og hvorfor de finnes. Men disse her brukes ikke,
     // p.g.a jeg sender mult som en "reference", og det er derfor ikke mulig (for C#) 
     // å vite hvilken av de som skal brukes (så må ha en dynamic en).
-    static private int Mult(int a, int b){
+    static public int Mult(int a, int b){
         return a * b;
     }
 
-    static private double Mult(double a, double b){
+    static public double Mult(double a, double b){
         return a * b;
     }
 
@@ -57,7 +59,7 @@ static public class Kalkulator{
     /// Deler a med b
     /// </summary>
     /// <returns>delte sum av A / D</returns>
-    static private dynamic Div(dynamic a, dynamic b){
+    static public dynamic Div(dynamic a, dynamic b){
         // Tvinger double return, da dynamic foretrekker å returnere int, selv om verdien helt tydelig ikke er.
         return (double)a / (double)b;
     }
@@ -70,7 +72,7 @@ static public class Kalkulator{
     /// <param name="numSeq">Liste av nummer og nevnere (som strings)</param>
     /// <param name="i">index hvor nevner er</param>
     /// <returns></returns>
-    static private List<string> KalkulererSettet(Func<dynamic, dynamic, dynamic> calcFunc, List<string> numSeq, int i){
+    static public List<string> KalkulererSettet(Func<dynamic, dynamic, dynamic> calcFunc, List<string> numSeq, int i){
         dynamic a = GetNum(numSeq[i - 1]);
         dynamic b = GetNum(numSeq[i + 1]);
         numSeq.RemoveAt(i + 1);
@@ -84,7 +86,7 @@ static public class Kalkulator{
     /// </summary>
     /// <param name="numSeq">Parsed set av nummer og nevnere</param>
     /// <returns>Summen som er kalkulert i enten double, eller int.</returns>
-    static private dynamic AddSubCheck(List<string> numSeq){
+    static public dynamic AddSubCheck(List<string> numSeq){
         dynamic sum = 0;
         bool firstPass = true;
         if(numSeq.Count > 1){
@@ -114,7 +116,7 @@ static public class Kalkulator{
     /// </summary>
     /// <param name="numSeq">parsed-list av nummer og nevnere.</param>
     /// <returns>Liste med ferdi kalkulert gange/dele verdi'er (som string) uten brukte nevnere (*, /)</returns>
-    static private List<string> MulDivCheck(List<string> numSeq){
+    static public List<string> MulDivCheck(List<string> numSeq){
         for(int i = 0; i < numSeq.Count ; i++){
             if(i % 2 != 0){ // even = numbers
                 if (numSeq[i] == "*"){
@@ -133,7 +135,7 @@ static public class Kalkulator{
     /// <summary>
     /// Printer ut en enkel og forstå Error melding uten å bryte program flyten.
     /// </summary>
-    static private void Error(){
+    static public void Error(){
             Console.WriteLine("ugylding input. Må være nummer, nevner, nummer");
     }
 
@@ -161,7 +163,7 @@ static public class Kalkulator{
     /// </summary>
     /// <param name="input">input string'en</param>
     /// <returns>liste med nummer og nevnere.</returns>
-    static private List<string> ParseInput(string input){
+    static public List<string> ParseInput(string input){
         List<string> output = new List<string>();
         string tmpString = "";
         for (int i = 0 ; i < input.Length ; i++){
@@ -184,7 +186,7 @@ static public class Kalkulator{
     /// </summary>
     /// <param name="numberString">Nummeret vi ønsker å convertere (som string)</param>
     /// <returns>enten double eller int.</returns>
-    static private dynamic GetNum (string numberString){
+    static public dynamic GetNum (string numberString){
         if(int.TryParse(numberString, out int intValue)){
             return intValue;
         }else if (double.TryParse(numberString, out double doubleValue)){
